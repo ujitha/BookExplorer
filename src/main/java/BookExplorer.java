@@ -1,3 +1,6 @@
+import pojo.BookDetail;
+import pojo.BookSearch;
+
 import java.util.Scanner;
 
 /**
@@ -11,8 +14,9 @@ public class BookExplorer {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number for preference");
         System.out.println("1. Search ");
-        System.out.println("2. Book Detail");
-        System.out.println("3. Download Book");
+        System.out.println("2. BookDetail Detail");
+        System.out.println("3. Download BookDetail");
+        System.out.println("4. Download the Book with ID");
 
         int num = sc.nextInt();
 
@@ -21,15 +25,15 @@ public class BookExplorer {
             String searchName =  sc.next();
 
             if(searchName != null) {
-                String searchResults = restClient.searchBooks(searchName);
-                System.out.println(searchResults);
+                BookSearch searchResults = restClient.searchBooks(searchName);
+
             }
         } else if (num==2){
-            System.out.println("Enter the Book ID : ");
+            System.out.println("Enter the BookDetail ID : ");
             String id = sc.next();
 
             if(id!= null) {
-                String searchResults = restClient.getBookDetails(id);
+                BookDetail searchResults = restClient.getBookDetails(id);
                 System.out.println(searchResults);
             }
         } else if(num==3) {
@@ -38,6 +42,12 @@ public class BookExplorer {
 
             if(link!=null) {
                 restClient.downloadBook(link);
+            }
+        } else if(num == 4) {
+            System.out.println("Enter the Book ID to download");
+            String id = sc.next();
+            if(id!=null){
+                restClient.downloadGivenBook(id);
             }
         } else {
             sc.close();

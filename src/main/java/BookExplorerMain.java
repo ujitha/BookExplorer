@@ -12,7 +12,7 @@ public class BookExplorerMain extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("BookExplorer.fxml"));
-        primaryStage.setTitle("Book Explorer");
+        primaryStage.setTitle("BookDetail Explorer");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }

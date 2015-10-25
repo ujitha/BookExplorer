@@ -1,6 +1,9 @@
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import org.codehaus.jackson.map.ObjectMapper;
+import pojo.BookDetail;
+import pojo.BookSearch;
 
 import java.awt.*;
 import java.net.URI;
@@ -20,8 +23,8 @@ public class RestClient {
     }
 
 
-    public String searchBooks(String name){
-        String output = null;
+    public BookSearch searchBooks(String name){
+        BookSearch bookSearch = null;
         try{
             String bookUrl = resourceUrl+"/search/"+name;
             WebResource webResource = bookClient.resource(bookUrl);
@@ -34,17 +37,19 @@ public class RestClient {
                         + response.getStatus());
             }
 
-             output = response.getEntity(String.class);
+             String output = response.getEntity(String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            bookSearch = objectMapper.readValue(output,BookSearch.class);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
-        return output;
+        return bookSearch;
 
     }
 
-    public String getBookDetails(String id) {
-        String output = null;
+    public BookDetail getBookDetails(String id) {
+        BookDetail book =  null;
         try{
             String bookUrl = resourceUrl+"/book/"+id;
             WebResource webResource = bookClient.resource(bookUrl);
@@ -57,13 +62,14 @@ public class RestClient {
                         + response.getStatus());
             }
 
-             output = response.getEntity(String.class);
+            String output = response.getEntity(String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            book = objectMapper.readValue(output, BookDetail.class);
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
-
-        return output;
+        return book;
     }
 
     public void downloadBook(String downloadLink){
@@ -76,5 +82,9 @@ public class RestClient {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void downloadGivenBook(String id) {
+        downloadBook(getBookDetails(id).getDownloadUrl());
     }
 }
